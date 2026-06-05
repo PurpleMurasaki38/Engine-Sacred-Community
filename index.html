@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AURELIA CMS — Luxury Blog Engine</title>
+<style>
+/* =======================================================
+   AURELIA CMS — Puro Luxo (Versão Estável)
+   ======================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=Playfair+Display:wght@700&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family:'Inter',sans-serif;
+    background:#07070b;
+    color:white;
+    overflow:hidden;
+}
+
+body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background: radial-gradient(circle at 20% 30%,#6f00ff55,transparent 40%),
+                radial-gradient(circle at 80% 70%,#00ffff22,transparent 40%),
+                linear-gradient(180deg,#0a0a0f,#030305);
+    z-index:-2;
+}
+
+body::after {
+    content:"";
+    position:fixed;
+    inset:0;
+    backdrop-filter:blur(90px);
+    z-index:-1;
+}
+
+/* Sidebar */
+.sidebar {
+    width:340px;
+    background:rgba(255,255,255,0.035);
+    border-right:1px solid rgba(255,255,255,0.12);
+    backdrop-filter:blur(30px);
+    padding:30px 25px;
+    overflow:auto;
+    box-shadow:4px 0 30px rgba(0,0,0,0.6);
+}
+
+.logo {
+    font-family:'Playfair Display',serif;
+    font-size:38px;
+    font-weight:900;
+    background:linear-gradient(90deg,#fff,#d4a5ff,#6f00ff);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.sub { opacity:0.65; font-size:13px; letter-spacing:3px; margin-bottom:35px; text-transform:uppercase; }
+
+/* Botões */
+.btn {
+    width:100%; padding:16px 20px; margin-bottom:12px; border:none; border-radius:18px;
+    background:linear-gradient(135deg,#6f00ff,#ae00ff); color:white; font-weight:700;
+    cursor:pointer; transition:all 0.4s; font-size:14.5px; box-shadow:0 8px 25px rgba(111,0,255,0.3);
+}
+
+.btn:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 15px 40px rgba(111,0,255,0.5); }
+.btn.secondary { background:rgba(255,255,255,0.08); }
+
+/* Wiki Button */
+.wiki-btn {
+    width:100%; padding:15px; margin-bottom:25px; border:none; border-radius:18px;
+    background:linear-gradient(135deg,#4a0080,#8a2be2); color:white; font-weight:700;
+    cursor:pointer;
+}
+
+.wiki-btn:hover { background:linear-gradient(135deg,#5f00a3,#9f4dff); }
+
+/* Canvas e Website */
+.canvas { flex:1; overflow:auto; padding:60px 40px; }
+
+.website {
+    max-width:1120px; margin:auto; background:white; color:black; border-radius:40px;
+    overflow:hidden; box-shadow:0 60px 160px rgba(0,0,0,0.75);
+}
+
+.hero { padding:120px 60px; background:linear-gradient(135deg,#1e0038,#5d00ff); color:white; text-align:center; }
+.hero h1 { font-family:'Playfair Display',serif; font-size:68px; }
+
+.content { padding:50px; }
+
+.block {
+    margin-bottom:40px; position:relative; border-radius:24px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1); transition:0.4s;
+}
+
+.block:hover { transform:translateY(-6px); }
+
+.block-tools {
+    position:absolute; top:14px; right:14px; z-index:20;
+}
+
+.tool-btn {
+    width:38px; height:38px; border:none; border-radius:12px; background:rgba(0,0,0,0.8);
+    color:white; cursor:pointer; font-size:16px;
+}
+
+.text-block { background:#f8f8f8; padding:40px; }
+.text-block h2 { font-family:'Playfair Display',serif; font-size:36px; color:#1a0033; }
+
+.columns { display:grid; gap:28px; }
+.two { grid-template-columns:1fr 1fr; }
+.three { grid-template-columns:1fr 1fr 1fr; }
+
+/* Imagens e Vídeos */
+.block img, .block video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Status */
+.status {
+    position:fixed; bottom:25px; right:25px; background:rgba(10,10,15,0.95);
+    padding:14px 24px; border-radius:20px; border:1px solid rgba(111,0,255,0.3);
+    z-index:999; backdrop-filter:blur(20px);
+}
+</style>
+</head>
+<body>
+<div class="engine" style="display:flex; height:100vh;">
+    <div class="sidebar">
+        <div class="logo">AURELIA</div>
+        <div class="sub">Luxury Blog Engine</div>
+        
+        <button onclick="window.open('https://purplemurasaki38.github.io/Wikipedia-Sacra-Communitas-By-LUCENO/','_blank')" class="wiki-btn">
+            📖 Abrir Wiki dos Santos
+        </button>
+
+        <h2 style="font-size:14px;opacity:0.6;margin:20px 0 12px;letter-spacing:2px;">TEXTOS</h2>
+        <button class="btn" onclick="addTextBlock()">+ Adicionar Texto</button>
+        <button class="btn secondary" onclick="add2Columns()">+ 2 Colunas</button>
+        <button class="btn secondary" onclick="add3Columns()">+ 3 Colunas</button>
+
+        <h2 style="font-size:14px;opacity:0.6;margin:25px 0 12px;letter-spacing:2px;">MÍDIA</h2>
+        <button class="btn" onclick="triggerImageUpload()">+ Imagem</button>
+        <button class="btn" onclick="triggerVideoUpload()">+ Vídeo</button>
+
+        <h2 style="font-size:14px;opacity:0.6;margin:25px 0 12px;letter-spacing:2px;">PROJETO</h2>
+        <button class="btn" onclick="saveEngineProject()">Salvar Projeto</button>
+        <button class="btn secondary" onclick="loadEngineProject()">Carregar Projeto</button>
+        <button class="btn" onclick="exportWebsite()">Exportar Site</button>
+        <button class="btn secondary" onclick="loadWebsiteHTML()">Carregar Site Exportado</button>
+    </div>
+
+    <div class="canvas">
+        <div class="website" id="website">
+            <div class="hero" id="hero">
+                <h1 contenteditable="true">Meu Blog Luxuoso</h1>
+                <p contenteditable="true">Criado com AURELIA CMS</p>
+            </div>
+            <div class="content" id="content"></div>
+            <div class="footer" style="padding:60px;background:#0a0a0a;color:#aaa;text-align:center;">
+                Powered by AURELIA CMS — Pure Luxury
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="status" id="status">Engine pronta • Luxo ativado</div>
+
+<input type="file" id="imageInput" accept="image/*" hidden>
+<input type="file" id="videoInput" accept="video/*" hidden>
+<input type="file" id="loadInput" hidden>
+
+<script>
+// ==================== AURELIA CMS - VERSÃO CORRIGIDA ====================
+const content = document.getElementById("content");
+const statusBox = document.getElementById("status");
+
+function setStatus(text) {
+    statusBox.innerText = text;
+    setTimeout(() => { 
+        statusBox.innerText = "Engine pronta • Luxo ativado"; 
+    }, 2200);
+}
+
+window.removeBlock = function(btn) {
+    const block = btn.closest('.block');
+    if (block) block.remove();
+};
+
+// ====================== TEXTOS ======================
+window.addTextBlock = function() {
+    const block = document.createElement("div");
+    block.className = "block text-block";
+    block.innerHTML = `
+        <div class="block-tools">
+            <button class="tool-btn" onclick="removeBlock(this)">✕</button>
+        </div>
+        <h2 contenteditable="true">Novo Título</h2>
+        <p contenteditable="true">Digite seu texto luxuoso aqui...</p>
+    `;
+    content.appendChild(block);
+    setStatus("Texto adicionado ✨");
+};
+
+// ====================== COLUNAS ======================
+window.add2Columns = function() {
+    const block = document.createElement("div");
+    block.className = "block columns two";
+    block.innerHTML = `
+        <div class="text-block">
+            <div class="block-tools"><button class="tool-btn" onclick="removeBlock(this)">✕</button></div>
+            <h2 contenteditable="true">Coluna 1</h2>
+            <p contenteditable="true">Texto luxuoso...</p>
+        </div>
+        <div class="text-block">
+            <div class="block-tools"><button class="tool-btn" onclick="removeBlock(this)">✕</button></div>
+            <h2 contenteditable="true">Coluna 2</h2>
+            <p contenteditable="true">Texto luxuoso...</p>
+        </div>
+    `;
+    content.appendChild(block);
+    setStatus("2 colunas adicionadas");
+};
+
+window.add3Columns = function() {
+    const block = document.createElement("div");
+    block.className = "block columns three";
+    block.innerHTML = `
+        <div class="text-block">
+            <div class="block-tools"><button class="tool-btn" onclick="removeBlock(this)">✕</button></div>
+            <h2 contenteditable="true">Coluna 1</h2>
+            <p contenteditable="true">Texto...</p>
+        </div>
+        <div class="text-block">
+            <div class="block-tools"><button class="tool-btn" onclick="removeBlock(this)">✕</button></div>
+            <h2 contenteditable="true">Coluna 2</h2>
+            <p contenteditable="true">Texto...</p>
+        </div>
+        <div class="text-block">
+            <div class="block-tools"><button class="tool-btn" onclick="removeBlock(this)">✕</button></div>
+            <h2 contenteditable="true">Coluna 3</h2>
+            <p contenteditable="true">Texto...</p>
+        </div>
+    `;
+    content.appendChild(block);
+    setStatus("3 colunas adicionadas");
+};
+
+// ====================== MÍDIA ======================
+window.triggerImageUpload = function() {
+    document.getElementById("imageInput").click();
+};
+
+document.getElementById("imageInput").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        const block = document.createElement("div");
+        block.className = "block";
+        block.innerHTML = `
+            <div class="block-tools">
+                <button class="tool-btn" onclick="removeBlock(this)">✕</button>
+            </div>
+            <img src="${ev.target.result}" alt="">
+        `;
+        content.appendChild(block);
+        setStatus("Imagem adicionada");
+    };
+    reader.readAsDataURL(file);
+});
+
+window.triggerVideoUpload = function() {
+    document.getElementById("videoInput").click();
+};
+
+document.getElementById("videoInput").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const block = document.createElement("div");
+    block.className = "block";
+    block.innerHTML = `
+        <div class="block-tools">
+            <button class="tool-btn" onclick="removeBlock(this)">✕</button>
+        </div>
+        <video controls><source src="${url}"></video>
+    `;
+    content.appendChild(block);
+    setStatus("Vídeo adicionado");
+});
+
+// ====================== SAVE / LOAD ======================
+window.saveEngineProject = function() {
+    const data = { html: document.getElementById("website").innerHTML };
+    const blob = new Blob([JSON.stringify(data)], {type: "application/json"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "aurelia-project.lux";
+    a.click();
+    setStatus("Projeto salvo");
+};
+
+window.loadEngineProject = function() {
+    const input = document.getElementById("loadInput");
+    input.accept = ".lux,.json";
+    input.onchange = function(e) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+            try {
+                const data = JSON.parse(ev.target.result);
+                document.getElementById("website").innerHTML = data.html;
+                setStatus("Projeto carregado");
+            } catch(err) {
+                setStatus("Erro ao carregar arquivo");
+            }
+        };
+        reader.readAsText(e.target.files[0]);
+    };
+    input.click();
+};
+
+window.exportWebsite = function() {
+    const fullHTML = document.getElementById("website").outerHTML;
+    const blob = new Blob([`<!DOCTYPE html><html>${fullHTML}</html>`], {type: "text/html"});
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "meu-blog-aurelia.html";
+    a.click();
+    setStatus("Site exportado com sucesso!");
+};
+
+window.loadWebsiteHTML = function() {
+    alert("Funcionalidade de carregar HTML exportado ainda em desenvolvimento.");
+};
+
+// Auto save
+setInterval(() => {
+    localStorage.setItem("aurelia-autosave", document.getElementById("website").innerHTML);
+}, 5000);
+
+window.onload = () => {
+    const saved = localStorage.getItem("aurelia-autosave");
+    if (saved) document.getElementById("website").innerHTML = saved;
+};
+</script>
+</body>
+</html>
